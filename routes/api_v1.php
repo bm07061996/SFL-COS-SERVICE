@@ -13,6 +13,11 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/', ['as' => 'api.version', 'uses' => 'ApiService@version']);
+$router->post('authentication', 'AuthService@login');
+
+$router->group(['middleware' => ['auth','postLoginValidator']], function () use ($router): void {
+    $router->post('postLogin', 'PostLoginService@process');
 });
+
+
